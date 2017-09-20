@@ -12,14 +12,15 @@ def scale(input_image, size, output):
     f = matrix.tolist()
     # scale factor
     w_scale = img.size[0] / size[0]
-    h_scale = img.size[0] / size[0]
+    h_scale = img.size[1] / size[1]
 
     src_width = img.size[0]
     src_height = img.size[1]
 
     print(w_scale, h_scale)
     new_image = [[0 for i in range(size[1])] for j in range(size[0])]
-
+    print(len(new_image), len(new_image[0]))
+    print(len(f), len(f[0]))
     # Assign those certain value
     # Now, when down-scale the image, repeated assigment will happen
     for x in range(len(new_image)):
@@ -30,10 +31,11 @@ def scale(input_image, size, output):
             # integer part
             i = int(math.floor(u))
             j = int(math.floor(v))
+            #print(i, j)
             # fractional part
             u = u - i
             v = v - j
-
+            #print(u, v)
             # bi-linear interpolation
             
             # first find four nearest point
@@ -57,11 +59,11 @@ def scale(input_image, size, output):
             f_x_y1 = ((x2 - i - u)/(x2 - x1)) * f[x1][y1] + ((i + u - x1)/(x2 - x1)) * f[x2][y1]
             f_x_y2 = ((x2 - i - u)/(x2 - x1)) * f[x1][y2] + ((i + u - x1)/(x2 - x1)) * f[x2][y2]
             # Interpolation of Y axis
-            new_image[x][y] = ((y2 - j - v)/(y2 - y1)) * f_x_y1 + ((j + v - y1)/(y2-y1)) * f_x_y2
+            new_image[x][y] = ((y2 - j - v)/(y2 - y1)) * f_x_y1 + ((j + v - y1)/(y2 - y1)) * f_x_y2
     # interpolation
     
     matrix = np.matrix(new_image, dtype=np.uint8)
-
+    print(matrix.shape)
     img = util.toImage(matrix)
 
     img.save(output)

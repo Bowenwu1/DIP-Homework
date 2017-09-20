@@ -17,25 +17,20 @@ def scale(input_image, size, output):
     src_width = img.size[1]
     src_height = img.size[0]
 
-    print(w_scale, h_scale)
     new_image = [[0 for i in range(size[0])] for j in range(size[1])]
-    print(len(new_image), len(new_image[0]))
-    print(len(f), len(f[0]))
     # Assign those certain value
     # Now, when down-scale the image, repeated assigment will happen
     for x in range(len(new_image)):
         for y in range(len(new_image[x])):
-            u = (x) * w_scale
-            v = (y) * h_scale
+            u = (x + 0.5) * w_scale - 0.5
+            v = (y + 0.5) * h_scale - 0.5
 
             # integer part
             i = int(math.floor(u))
             j = int(math.floor(v))
-            #print(i, j)
             # fractional part
             u = u - i
             v = v - j
-            #print(u, v)
             # bi-linear interpolation
             
             # first find four nearest point
@@ -47,12 +42,10 @@ def scale(input_image, size, output):
                 print('y : ', y)
             y2 = j + 1
             if j + 1 >= src_height:
-                print(y2)
                 y2 = j - 1
-                print(y2)
             x2 = i + 1
             if i + 1 >= src_width:
-                print('x2 exceed')
+                #print('x2 exceed')
                 x2 = i - 1
             #print((x1, y1), (x2, y2))
             # Interpolation of X axis
@@ -63,9 +56,18 @@ def scale(input_image, size, output):
     # interpolation
     
     matrix = np.matrix(new_image, dtype=np.uint8)
-    print(matrix.shape)
     img = util.toImage(matrix)
 
     img.save(output)
 
-scale('10.png', (192, 128), 'test.png')
+scale('10.png', (192, 128), './Scale/down-scale(192x128).png')
+scale('10.png', (96, 64), './Scale/down-scale(96x64).png')
+scale('10.png', (48, 32), './Scale/down-scale(48x32).png')
+scale('10.png', (24, 16), './Scale/down-scale(24x16).png')
+scale('10.png', (12, 8), './Scale/down-scale(12x8).png')
+
+scale('10.png', (300, 200), './Scale/down-scale(300x200).png')
+
+scale('10.png', (450, 300), './Scale/up-scale(450x300).png')
+
+scale('10.png', (500, 200), './Scale/scale(500x200).png')

@@ -11,7 +11,7 @@ def quantize(input_img, level, output):
     matrix = util.toMatrix(img)
     
     length = (255+1)/level
-
+    seg_length = 255/(level - 1)
     # I do not know how to iterate numpy matrix
     # I have tried many ways and can not do it correctly, so I transfer it
     # to list and operate on it then transfer it back
@@ -21,7 +21,7 @@ def quantize(input_img, level, output):
     for i in range(len(matrix_list)):
         for j in range(len(matrix_list[i])):
             matrix_list[i][j] = int(matrix_list[i][j] / int(length))
-            matrix_list[i][j] = matrix_list[i][j] * length
+            matrix_list[i][j] = matrix_list[i][j] * seg_length
 
     matrix = np.matrix(matrix_list, dtype=np.uint8)
     img = util.toImage(matrix)

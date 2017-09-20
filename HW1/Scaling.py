@@ -22,6 +22,7 @@ def scale(input_image, size, output):
     # Now, when down-scale the image, repeated assigment will happen
     for x in range(len(new_image)):
         for y in range(len(new_image[x])):
+            # ???
             u = (x + 0.5) * w_scale - 0.5
             v = (y + 0.5) * h_scale - 0.5
 

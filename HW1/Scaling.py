@@ -11,14 +11,14 @@ def scale(input_image, size, output):
     matrix = util.toMatrix(img)
     f = matrix.tolist()
     # scale factor
-    w_scale = img.size[0] / size[0]
-    h_scale = img.size[1] / size[1]
+    w_scale = img.size[1] / size[1]
+    h_scale = img.size[0] / size[0]
 
-    src_width = img.size[0]
-    src_height = img.size[1]
+    src_width = img.size[1]
+    src_height = img.size[0]
 
     print(w_scale, h_scale)
-    new_image = [[0 for i in range(size[1])] for j in range(size[0])]
+    new_image = [[0 for i in range(size[0])] for j in range(size[1])]
     print(len(new_image), len(new_image[0]))
     print(len(f), len(f[0]))
     # Assign those certain value

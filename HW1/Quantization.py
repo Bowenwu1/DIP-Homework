@@ -27,9 +27,3 @@ def quantize(input_img, level, output):
     img = util.toImage(matrix)
 
     img.save(output)
-
-quantize('10.png', 128, './Quantization/10-level-128.png')
-quantize('10.png', 32, './Quantization/10-level-32.png')
-quantize('10.png', 8, './Quantization/10-level-8.png')
-quantize('10.png', 4, './Quantization/10-level-4.png')
-quantize('10.png', 2, './Quantization/10-level-2.png')

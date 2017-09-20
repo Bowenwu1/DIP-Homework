@@ -60,15 +60,3 @@ def scale(input_image, size, output):
     img = util.toImage(matrix)
 
     img.save(output)
-
-scale('10.png', (192, 128), './Scale/down-scale(192x128).png')
-scale('10.png', (96, 64), './Scale/down-scale(96x64).png')
-scale('10.png', (48, 32), './Scale/down-scale(48x32).png')
-scale('10.png', (24, 16), './Scale/down-scale(24x16).png')
-scale('10.png', (12, 8), './Scale/down-scale(12x8).png')
-
-scale('10.png', (300, 200), './Scale/down-scale(300x200).png')
-
-scale('10.png', (450, 300), './Scale/up-scale(450x300).png')
-
-scale('10.png', (500, 200), './Scale/scale(500x200).png')

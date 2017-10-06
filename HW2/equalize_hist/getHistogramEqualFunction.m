@@ -17,16 +17,14 @@ for i = 1 : L
 end
 %total_pixel = total_pixel - min;
 transform_func = zeros(1, L);
+prob = 0;
+
 for i = 1 : L
-    prob = 0;
+    prob = prob + his(i);
     % Calculate sum of frequency
-    for j = 1 : i
-        prob = prob + his(j);
-    end
  %   prob = prob - min;
     % Transform frequency to probability
-    prob = prob / total_pixel;
-    transform_func(i) = prob * (L - 1);
+    transform_func(i) = (prob / total_pixel) * (L - 1);
 
 transform_func = uint8(transform_func);
 end

@@ -1,4 +1,5 @@
 function [ output_img ] = bicubic(input_img, height, width)
+input_img = double(input_img);
     function [output] = getPixel(x, y)
         if (x > 0 && x <= origin_height && y > 0 && y <= origin_width)
             output = input_img(x, y);
@@ -13,7 +14,7 @@ function [ output_img ] = bicubic(input_img, height, width)
         if (x >= 0 && x <= 1)
             output = 1.5 * x^3 - 2.5 * x^2 + 1;
         elseif (x > 1 && x <= 2)
-            output = -0.5 * x ^ 3 + 2.5 * x^2 - 4 * x + 2;
+            output = -0.5 * x^3 + 2.5 * x^2 - 4 * x + 2;
         else
             output = 0;
         end
@@ -33,8 +34,8 @@ for m = 1 : height
         target_m_floor = floor(target_m);
         target_n_floor = floor(target_n);
         % Directly copy the formula
-        for x = target_m_floor - 2 : target_m_floor + 2
-            for y = target_n_floor - 2 : target_n_floor + 2
+        for x = target_m_floor - 3 : target_m_floor + 3
+            for y = target_n_floor - 3 : target_n_floor + 3
                 output_img(m, n) = output_img(m, n) + getPixel(x, y) * W(x - target_m) * W(y - target_n);
             end
         end

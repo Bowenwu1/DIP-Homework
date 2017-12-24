@@ -11,6 +11,7 @@ import skimage.util
 import skimage.measure as measure
 import sklearn.feature_extraction.image
 import sklearn.externals.joblib
+import sklearn.svm
 
 
 def load_data_set(directory):
@@ -35,8 +36,8 @@ def divide_into_blocks(data_set):
 
 def fit(train_patches, label_patches):
     patch_num = train_patches.shape[1]
-    # estimators = [sklearn.linear_model.LinearRegression() for _ in range(patch_num)]
-    estimators = [sklearn.linear_model.LinearRegression() for _ in range(patch_num)]    
+    estimators = [sklearn.linear_model.LinearRegression() for _ in range(patch_num)]
+    # estimators = [sklearn.svm.SVC() for _ in range(patch_num)]
     for i in range(patch_num):
         x = train_patches[:, i, :]
         y = label_patches[:, i, :]
@@ -71,7 +72,7 @@ def load_model(file_name):
     return sklearn.externals.joblib.load(file_name)
 
 
-block_size = (64, 64)
+block_size = (8, 8)
 image_size = (64, 64)
 blocks_in_row = image_size[0] // block_size[0]
 blocks_in_column = image_size[1] // block_size[1]
@@ -90,14 +91,17 @@ fit_estimators = fit(train_patches_set, label_patches_set)
 
 save_model("model", fit_estimators)
 
-# test = scipy.misc.imread('../data_set/test-set/predict/cat-41.jpg')
-# ans = predict(fit_estimators, test)
+test = scipy.misc.imread('../data_set/test-set/test.jpg')
+origin = scipy.misc.imread('../data_set/test-set/origin.jpg')
+ans = predict(fit_estimators, test)
 
-# matplotlib.pyplot.figure()
-# matplotlib.pyplot.imshow(ans, cmap='gray')
-# matplotlib.pyplot.figure()
-# matplotlib.pyplot.imshow(test, cmap='gray')
-# matplotlib.pyplot.show()
+matplotlib.pyplot.figure()
+matplotlib.pyplot.imshow(ans, cmap='gray')
+matplotlib.pyplot.figure()
+matplotlib.pyplot.imshow(test, cmap='gray')
+matplotlib.pyplot.figure()
+matplotlib.pyplot.imshow(origin, cmap='gray')
+matplotlib.pyplot.show()
 
 def TestPredict(predictDirectory, ansDirectory):
     # These two should have same size

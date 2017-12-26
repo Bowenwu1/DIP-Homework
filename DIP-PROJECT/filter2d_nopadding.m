@@ -15,18 +15,22 @@ output_img = zeros(h - 2 * halfFilterLength_h, w - 2 * halfFilterLength_w);
 for i = 1 : h - halfFilterLength_h * 2
     for j = 1 : w - halfFilterLength_w * 2
         % center is (i + halfFilterLength_h, j + halfFilterLength_w);
-        sum = 0;
-        total_weight = 0;
+%         sum = 0;
+%         total_weight = 0;
+%         i_temp = i + halfFilterLength_h;
+%         j_temp = j + halfFilterLength_w;
+%         for m = -1 * halfFilterLength_h : halfFilterLength_h
+%             for n = -1 * halfFilterLength_w : halfFilterLength_w
+%                 total_weight = total_weight + filter(filter_center(1) + m, filter_center(2) + n);
+%                 sum = sum + img(i_temp + m, j_temp + n) * filter(filter_center(1) + m, filter_center(2) + n);
+%             end
+%         end
+%         sum = sum / total_weight;
         i_temp = i + halfFilterLength_h;
         j_temp = j + halfFilterLength_w;
-        for m = -1 * halfFilterLength_h : halfFilterLength_h
-            for n = -1 * halfFilterLength_w : halfFilterLength_w
-                total_weight = total_weight + filter(filter_center(1) + m, filter_center(2) + n);
-                sum = sum + img(i_temp + m, j_temp + n) * filter(filter_center(1) + m, filter_center(2) + n);
-            end
-        end
-        sum = sum / total_weight;
-        output_img(i, j) = sum;
+        temp = sum(sum(filter .* img(i_temp - halfFilterLength_h : i_temp + halfFilterLength_h,...
+                                            j_temp - halfFilterLength_w : j_temp + halfFilterLength_w)));
+        output_img(i, j) = temp;
     end
 end
 

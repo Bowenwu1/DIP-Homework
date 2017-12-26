@@ -38,10 +38,13 @@ def fit(train_patches, label_patches):
     patch_num = train_patches.shape[1]
     estimators = [sklearn.linear_model.LinearRegression() for _ in range(patch_num)]
     # estimators = [sklearn.svm.SVC() for _ in range(patch_num)]
+    # estimators = sklearn.linear_model.LinearRegression()
+    x = []
+    y = []
     for i in range(patch_num):
-        x = train_patches[:, i, :]
-        y = label_patches[:, i, :]
-        estimators[i].fit(x, y)
+        # x.extend(list(train_patches[:, 1, :]))
+        # y.extend(list(label_patches[:, 1, :]))
+        estimators[i].fit(train_patches[:, i, :], label_patches[:, i, :])
     return estimators
 
 
@@ -55,6 +58,7 @@ def predict(estimators, test):
         column_patches = []
         for column in range(blocks_in_column):
             index = row * blocks_in_row + column
+            index = index % len(estimators)
             predict_patch = estimators[index].predict(test_patches[index].reshape(1, -1))
             predict_patch = predict_patch.reshape(block_size)
             column_patches.append(predict_patch)
@@ -72,7 +76,7 @@ def load_model(file_name):
     return sklearn.externals.joblib.load(file_name)
 
 
-block_size = (8, 8)
+block_size = (4, 4)
 image_size = (64, 64)
 blocks_in_row = image_size[0] // block_size[0]
 blocks_in_column = image_size[1] // block_size[1]
@@ -91,6 +95,11 @@ fit_estimators = fit(train_patches_set, label_patches_set)
 
 save_model("model", fit_estimators)
 
+block_size = (4, 4)
+image_size = (512, 512)
+blocks_in_row = image_size[0] // block_size[0]
+blocks_in_column = image_size[1] // block_size[1]
+
 test = scipy.misc.imread('../data_set/test-set/test.jpg')
 origin = scipy.misc.imread('../data_set/test-set/origin.jpg')
 ans = predict(fit_estimators, test)
@@ -102,6 +111,11 @@ matplotlib.pyplot.imshow(test, cmap='gray')
 matplotlib.pyplot.figure()
 matplotlib.pyplot.imshow(origin, cmap='gray')
 matplotlib.pyplot.show()
+
+block_size = (4, 4)
+image_size = (64, 64)
+blocks_in_row = image_size[0] // block_size[0]
+blocks_in_column = image_size[1] // block_size[1]
 
 def TestPredict(predictDirectory, ansDirectory):
     # These two should have same size

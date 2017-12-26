@@ -14,7 +14,7 @@ for i = 1 : length(images)
     end
     small_image = uint8(small_image);
     big_image = uint8(big_image);
-    imshow(big_image);
+%     imshow(big_image);
     if (3 == dimension)
         origin_image = rgb2ycbcr(origin_image);
         big_image = rgb2ycbcr(big_image);

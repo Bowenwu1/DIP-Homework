@@ -1,10 +1,10 @@
 % Created by Bowen Wu in 2017/12/26
-% This Script is aim to Train the Cluster Model for Super Resolution
+% This Script is aim to get Training Data and cut into LR/HR patches
 clear;
 tic;
 % ###### Change These Variables to fit your own computer ########
 train_img_dir = ('/Users/wubowen/Documents/DIP-Homework/DIP-PROJECT/AllFive/*.jpg');
-sigma = 0.4;
+sigma = 1.2;
 cluster_num = 512;
 patch_size = 7;
 scale_factor = 3;
@@ -16,7 +16,7 @@ patch_effective_area = [2:6 8:42 44:48];
 large_patch_size = 21;
 large_patch_effective_size = 9;
 % approximation_patch_num_per_image = 4000;
-max_patches = 100000;
+max_patches = 300000;
 % Making the kernel size odd will be easier to implement
 gaussian_kernel_size = ceil(sigma*3)*2+1;
 gaussian_kernel = gaussianFilterGenerator(gaussian_kernel_size, sigma);
@@ -38,6 +38,8 @@ for image_index = 1 : length(images)
     % Convert to YUV and only preseve Y chnnel
     img = rgb2ycbcr(img);
     img = img(:, :, 1);
+    % Be careful about the type
+    img = double(img);
     % Gaussian Conv
     img = conv2(double(img), double(gaussian_kernel));
     % Slicing
@@ -53,12 +55,15 @@ for image_index = 1 : length(images)
             % Down Sampling
             hr_patch = img(r_min:r_max, c_min:c_max);
             lr_patch = bicubic(hr_patch, patch_size, patch_size);
+            lr_patch = double(lr_patch);
             total_patches_num = total_patches_num + 1;
-            lr_patches(total_patches_num, :) = lr_patch(patch_effective_area);
+            % Substract mean
+            lr_patch_mean = mean(lr_patch(patch_effective_area));
+            lr_patches(total_patches_num, :) = lr_patch(patch_effective_area) - lr_patch_mean;
             % maybe affect efficency
             hr_patch_center_area = hr_patch(hr_center - hr_center_size_half:hr_center + hr_center_size_half,...
                                             hr_center - hr_center_size_half:hr_center + hr_center_size_half);
-            hr_patches(total_patches_num, :) = hr_patch_center_area(:);
+            hr_patches(total_patches_num, :) = hr_patch_center_area(:) - lr_patch_mean;
         end
     end
     if mod(total_patches_num, 1000) == 0
@@ -72,6 +77,6 @@ fprintf('INFO: end gain trainning data\n');
 
 % Cluster
 options = statset('UseParallel', 1);
-[idx, C, sumd, D] = kmeans(lr_patches, cluster_num, 'Display', 'Iter', 'Options', options);
+[idx, C, sumd, D] = kmeans(lr_patches, cluster_num, 'Display', 'Iter', 'Options', options, 'MaxIter', 500);
 save('cluster.mat', 'lr_patches', 'hr_patches', 'idx', 'C', 'sumd', 'D');
 toc;

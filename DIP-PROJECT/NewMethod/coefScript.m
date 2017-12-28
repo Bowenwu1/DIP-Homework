@@ -14,5 +14,27 @@ large_patch_size = 21;
 large_patch_effective_size = 9;
 
 load('cluster.mat');
+% Num of total patches
+l = length(hr_patches);
+% Dimension of LR patch vector
+m = size(lr_patches);
+m = m(2);
+% Dimension of HR patch vector
+n = size(hr_patches);
+n = n(2);
+% Some Weird Tech
+lr_patches = [lr_patches ones(l, 1)];
 
-lr_patches = [lr_patches; ones(patch_size * patch_size - 4)];
+% Least-Square
+coef_matrix = zeros(patch_size * patch_size - 4 + 1, large_patch_effective_size * large_patch_effective_size, cluster_num);
+% coef_matrix = zeros(large_patch_effective_size * large_patch_effective_size, patch_size * patch_size - 4 + 1, cluster_num);
+for i = 1 : cluster_num
+    coef_matrix(:, :, i) = lr_patches(idx == i, :) \ hr_patches(idx == i, :);
+%     coef_matrix(:, :, i) = hr_patches(idx == i, :) \ lr_patches(idx == i, :);
+    r = rank(lr_patches(idx == i, :));
+    if r < 46
+        fprintf('%d cluster rank less than 46, rank : %d', i, r);
+    end
+end
+
+save('coef.mat', 'coef_matrix');

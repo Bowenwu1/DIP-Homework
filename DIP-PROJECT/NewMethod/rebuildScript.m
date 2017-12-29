@@ -34,7 +34,7 @@ hr_image = zeros(origin_h, origin_w, chanel_num);
 % Transfer lr_image to YUV
 lr_image = rgb2ycbcr(uint8(lr_image));
 lr_image = double(lr_image);
-% Apple Bicubic in U and V
+% Apply Bicubic in U and V
 for i = 2 : chanel_num
     hr_image(:, :, i) = bicubic(lr_image(:, :, i), origin_h, origin_w);
 end

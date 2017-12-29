@@ -5,6 +5,9 @@
 clear;
 clc;
 InitParameter
+load('LR_patch_set.mat');
+load('HR_patch_set.mat');
+load('patch_cluster_label.mat');
 load('total_patch_num.mat');
 
 % coef_matrix = zeros(hr_center_size * hr_center_size, ...
@@ -14,23 +17,19 @@ coef_matrix = zeros(lr_patch_size * lr_patch_size - 3, ...
 whetherRankDeficiency = zeros(cluster_num, 1); % 1 for Deficiency, 0 otherwise
 
 % special tech
-% LR_patch_set = [LR_patch_set; ones(1, total_patch_num)];
+LR_patch_set = [LR_patch_set; ones(1, total_patch_num)];
 
 for cluster_index = 1 : cluster_num
     fprintf('INFO : calculating %d cluster coef\n', cluster_index);
-    filename = sprintf('%d_cluster_patch_set', cluster_index);
-    load(filename);
+    LR_subset = LR_patch_set(:, patch_cluster_label == cluster_index);
+    HR_subset = HR_patch_set(:, patch_cluster_label == cluster_index);
     % calculate rank
-    % special tech
-    l = length(LR_subset);
-    LR_subset = [LR_subset; ones(1, l)];
-     r = rank(LR_subset');
-     whetherRankDeficiency(cluster_index) = r;
+%     r = rank(LR_subset');
 %     if r < lr_patch_size * lr_patch_size - 3
 %         fprintf('INFO : cluster No.%d have rank %d\n', cluster_index, r);
 %         whetherRankDeficiency(cluster_index) = 1;
 %     end
-coef_matrix(:, :, cluster_index) = LR_subset' \ HR_subset';
+    coef_matrix(:, :, cluster_index) = LR_subset' \ HR_subset';
 end
 
 save('coef_matrix.mat', 'coef_matrix');

@@ -36,8 +36,10 @@ for image_index = 1 : length(images)
     % Read the Image
     img = imread(images(image_index).name);
     % Convert to YUV and only preseve Y chnnel
-    img = rgb2ycbcr(img);
-    img = img(:, :, 1);
+%     img = rgb2ycbcr(img);
+%     img = img(:, :, 1);
+%   Use Gray Level Image
+    img = rgb2gray(img);
     % Be careful about the type
     img = double(img);
     % Gaussian Conv

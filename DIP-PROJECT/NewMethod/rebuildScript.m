@@ -22,18 +22,18 @@ large_patch_size = 21;
 large_patch_effective_size = 9;
 % ####################################
 
-sample_image = imread('/Users/wubowen/Documents/DIP-Homework/DIP-PROJECT/Set14/face.bmp');
+sample_image = imread('/Users/wubowen/Documents/DIP-Homework/DIP-PROJECT/Set14/baboon.bmp');
 [origin_h, origin_w, chanel_num] = size(sample_image);
 lr_image = zeros(floor(origin_h / 3), floor(origin_w / 3), chanel_num);
 for i = 1 : chanel_num
     lr_image(:, :, i) = bicubic(sample_image(:, :, i), floor(origin_h / 3), floor(origin_w / 3));
 end
-
+imshow(lr_image);
 hr_image = zeros(origin_h, origin_w, chanel_num);
 
 % Transfer lr_image to YUV
-lr_image = rgb2ycbcr(lr_image);
-
+lr_image = rgb2ycbcr(uint8(lr_image));
+lr_image = double(lr_image);
 % Apple Bicubic in U and V
 for i = 2 : chanel_num
     hr_image(:, :, i) = bicubic(lr_image(:, :, i), origin_h, origin_w);
@@ -74,5 +74,5 @@ end
 
 % Divide Count
 hr_image(:, :, 1) = hr_image(:, :, 1) ./ hr_image_restore_count;
-% hr_image = ycbcr2rgb(uint8(hr_image));
-imshow(uint8(hr_image(:, :, 1)));
+hr_image = ycbcr2rgb(uint8(hr_image));
+imshow(uint8(hr_image));

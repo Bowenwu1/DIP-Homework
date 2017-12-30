@@ -1,0 +1,7 @@
+GeneratePatches
+RandomSelectPatch
+TrainClusterCenter
+LabelAllPatches
+DividePatchesByClusterLabel
+CalculateCoefMatrix
+RebuildImage

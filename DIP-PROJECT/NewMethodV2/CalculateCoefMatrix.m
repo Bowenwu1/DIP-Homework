@@ -30,7 +30,11 @@ for cluster_index = 1 : cluster_num
 %         fprintf('INFO : cluster No.%d have rank %d\n', cluster_index, r);
 %         whetherRankDeficiency(cluster_index) = 1;
 %     end
-coef_matrix(:, :, cluster_index) = LR_subset' \ HR_subset';
+% coef_matrix(:, :, cluster_index) = LR_subset' \ HR_subset';
+    for j = 1 : hr_center_size * hr_center_size
+        B = HR_subset(j, :);
+        coef_matrix(:, j, cluster_index) = LR_subset' \ B';
+    end
 end
 
 save('coef_matrix.mat', 'coef_matrix');

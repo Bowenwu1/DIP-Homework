@@ -9,7 +9,7 @@ load('coef_matrix.mat');
 load('cluster_center.mat');
 load('total_patch_num.mat');
 
-sample_image = imread('/Users/wubowen/Documents/DIP-Homework/DIP-PROJECT/Set14/face.bmp');
+sample_image = imread('/Users/wubowen/Documents/DIP-Homework/DIP-PROJECT/Set14/pepper.bmp');
 [origin_h, origin_w, channel_num] = size(sample_image);
 lr_h = floor(origin_h / scale_factor);
 lr_w = floor(origin_w / scale_factor);
@@ -24,7 +24,7 @@ hr_image = zeros(hr_h, hr_w, channel_num);
 
 % Transfer lr_image to YUV
 lr_image = rgb2ycbcr(uint8(lr_image));
-
+lr_image = double(lr_image);
 % apply bicubic in U and V
 for i = 2 : channel_num
     hr_image(:, :, i) = bicubic(lr_image(:, :, i), hr_h, hr_w);
@@ -55,9 +55,9 @@ for r = 1 : lr_h - (lr_patch_size - 1)
         [~, clusterIndex] = min(l2normsquare);
         % Generate hr_feature from coef matrix
         hr_feature = [lr_feature 1] * coef_matrix(:, :, clusterIndex);
-        hr_patch = reshape(hr_feature + lr_feature_mean, hr_center_size, hr_center_size);
+        hr_patch = reshape(hr_feature + lr_feature_mean, hr_center_size, hr_center_size) + lr_feature_mean;
         % Add to HR image
-        hr_image(target_r:target_r1, target_c:target_c1) = hr_image(target_r:target_r1, target_c:target_c1)...
+        hr_image(target_r:target_r1, target_c:target_c1, 1) = hr_image(target_r:target_r1, target_c:target_c1, 1)...
                                                             + hr_patch;
         hr_image_restore_count(target_r:target_r1, target_c:target_c1) = ...
                 hr_image_restore_count(target_r:target_r1, target_c:target_c1) + 1;
@@ -67,6 +67,6 @@ end
 
 % Divide Count
 hr_image(:, :, 1) = hr_image(:, :, 1) ./ hr_image_restore_count;
-hr_image = ycbcr2rgb(uint8(hr_image));
-imshow(uint8(hr_image));
+% hr_image = ycbcr2rgb(uint8(hr_image));
+% imshow(uint8(hr_image));
                 

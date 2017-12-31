@@ -20,8 +20,8 @@ hr_w = lr_w * scale_factor;
 kernel = gaussianFilterGenerator(gaussian_kernel_size, sigma);
 sample_image(:, :, 1) = conv2(double(sample_image(:, :, 1)), double(kernel), 'same');
 for i = 1 : channel_num
-    lr_image(:, :, i) = bicubic(sample_image(:, :, i), lr_h, lr_w);
-%       lr_image(:, :, i) = imresize(sample_image(:, :, i), [lr_h lr_w]);
+%     lr_image(:, :, i) = bicubic(sample_image(:, :, i), lr_h, lr_w);
+      lr_image(:, :, i) = imresize(sample_image(:, :, i), [lr_h,
 end
 
 hr_image = zeros(hr_h, hr_w, channel_num);
@@ -31,8 +31,8 @@ lr_image = rgb2ycbcr(uint8(lr_image));
 lr_image = double(lr_image);
 % apply bicubic in U and V
 for i = 2 : channel_num
-    hr_image(:, :, i) = bicubic(lr_image(:, :, i), hr_h, hr_w);
-%       hr_image(:, :, i) = imresize(lr_image(:, :, i), [hr_h hr_w]);
+%     hr_image(:, :, i) = bicubic(lr_image(:, :, i), hr_h, hr_w);
+      hr_image(:, :, i) = imresize(lr_image(:, :, i), [hr_h hr_w]);
 end
 lr_image = double(lr_image);
 hr_image = double(hr_image);
@@ -49,8 +49,8 @@ for r = 1 : lr_ext_h - (lr_patch_size - 1)
         c1 = c + lr_patch_size - 1;
         r_center = r + lr_patch_size_half;
         c_center = c + lr_patch_size_half;
-        target_r_center = (r_center - 1 + 0.5) * scale_factor + 1 - 0.5;
-        target_c_center = (c_center - 1 + 0.5) * scale_factor + 1 - 0.5;
+        target_r_center = (r_center - 1 + 0.5) * scale_factor + 1 + dist - 0.5;
+        target_c_center = (c_center - 1 + 0.5) * scale_factor + 1 + dist - 0.5;
         target_r = target_r_center - hr_center_size_half;
         target_c = target_c_center - hr_center_size_half;
         target_r1 = target_r_center + hr_center_size_half;

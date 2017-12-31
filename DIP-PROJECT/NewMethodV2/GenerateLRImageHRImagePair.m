@@ -21,5 +21,5 @@ HRImage_after_gaussian = conv2(double(HRImage), double(kernel), 'same');
 LRImage = bicubic(uint8(HRImage_after_gaussian), hr_w / scaleFactor, hr_h / scaleFactor);
 
 % change on 2017/12/31
-HRImage = HRImage_after_gaussian;
+% HRImage = HRImage_after_gaussian;
 end

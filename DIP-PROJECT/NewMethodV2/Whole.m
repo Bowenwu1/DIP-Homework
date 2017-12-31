@@ -1,7 +1,7 @@
-GeneratePatches
-RandomSelectPatch
-TrainClusterCenter
-LabelAllPatches
-DividePatchesByClusterLabel
-CalculateCoefMatrix
-RebuildImage
+P1_GeneratePatches
+P2_RandomSelectPatch
+P3_TrainClusterCenter
+P4_LabelAllPatchesV2
+P5_DividePatchesByClusterLabelV2
+P6_CalculateCoefMatrix
+P7_RebuildImage

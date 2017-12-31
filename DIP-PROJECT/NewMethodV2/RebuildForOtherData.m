@@ -9,13 +9,15 @@ load('cluster_centroid2.mat');
 load('coef_matirxs14.mat');
 load('total_patch_num.mat');
 
-sample_image = imread('/Users/wubowen/Documents/DIP-Homework/DIP-PROJECT/Set14/baboon.bmp');
+sample_image = imread('/Users/wubowen/Documents/DIP-Homework/DIP-PROJECT/Set14/lenna.bmp');
 [origin_h, origin_w, channel_num] = size(sample_image);
 lr_h = floor(origin_h / scale_factor);
 lr_w = floor(origin_w / scale_factor);
 lr_image = zeros(lr_h, lr_w, channel_num);
 hr_h = lr_h * scale_factor;
 hr_w = lr_w * scale_factor;
+kernel = gaussianFilterGenerator(gaussian_kernel_size, sigma);
+sample_image(:, :, 1) = conv2(double(sample_image(:, :, 1)), double(kernel), 'same');
 for i = 1 : channel_num
     lr_image(:, :, i) = bicubic(sample_image(:, :, i), lr_h, lr_w);
 end

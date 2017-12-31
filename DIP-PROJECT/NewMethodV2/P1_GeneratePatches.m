@@ -14,7 +14,10 @@ HR_patch_set = zeros(hr_center_size * hr_center_size, approximation_patches);
 
 for image_index = 1 : image_num
     fprintf('INFO : Processing No.%d image\n', image_index);
-    HRImage = imread(images(image_num).name);
+    if image_index > 300
+        break;
+    end
+    HRImage = imread(images(image_index).name);
     [LRImage, HRImage] = GenerateLRImageHRImagePair(HRImage, scale_factor, gaussian_kernel_size, sigma);
     [HR_w, HR_h] = size(HRImage);
     [LR_w, LR_h] = size(LRImage);

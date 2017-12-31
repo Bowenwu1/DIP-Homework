@@ -1,6 +1,6 @@
 % Created by Bowen Wu in 20171229
 % This script is aim to generate all patches in train dir
-
+% This script run very slow
 clc;
 clear;
 InitParameter
@@ -21,8 +21,8 @@ for image_index = 1 : image_num
     end
     HRImage_gaussian = conv2(double(HRImage), kernel, 'same');
     % Cut hr patches, and generate lr patches
-    for hr_r = 1 : HR_w - hr_patch_size + 1
-        for hr_c = 1 : HR_h - hr_patch_size + 1
+    for hr_r = 1 : hr_patch_size : HR_w - hr_patch_size + 1
+        for hr_c = 1 : hr_patch_size : HR_h - hr_patch_size + 1
             % Left-Top (hr_r, hr_c)
             % Right-Bottom (hr_r1, hr_c1)
             hr_r1 = hr_r + hr_patch_size - 1;
@@ -39,12 +39,17 @@ for image_index = 1 : image_num
             hr_center_c1 = hr_center_cc + hr_center_size_half;
             
             hr_patch_gaussian = HRImage_gaussian(hr_r:hr_r1, hr_c:hr_c1);
-            lr_patch = bicubic(hr_patch_gaussian, lr_patch_size, lr_patch_size);
+            lr_patch = imresize(hr_patch_gaussian, [lr_patch_size lr_patch_size], 'nearest');
             lr_feature = double(lr_patch(lr_patch_effective_area));
             lr_feature_mean = mean(lr_feature);
             hr_patch_center_area = HRImage(hr_center_r:hr_center_r1, hr_center_c:hr_center_c1);
             hr_feature = double(hr_patch_center_area(:));
             
+            total_patch_num = total_patch_num + 1;
+            LR_patch_set(:, total_patch_num) = lr_feature - lr_feature_mean;
+            HR_patch_set(:, total_patch_num) = hr_feature - lr_feature_mean;
+        end
+    end
 end
 
 % To avoid total patch_num less than the size of patch_set

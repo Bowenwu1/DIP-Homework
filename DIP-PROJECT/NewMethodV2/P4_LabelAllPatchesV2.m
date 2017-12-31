@@ -16,6 +16,7 @@ RandStream.setGlobalStream(seed)
 random_index = rand(num_patch_to_train_coef_matrix,1);
 random_index = ceil(random_index * total_patch_num);
 random_index = sort(random_index,'ascend');
+% random_index = [1:num_patch_to_train_coef_matrix];
 LR_patch_set = LR_patch_set(:, random_index);
 patch_cluster_label = zeros(num_patch_to_train_coef_matrix, 1);
 for patch_index = 1 : num_patch_to_train_coef_matrix

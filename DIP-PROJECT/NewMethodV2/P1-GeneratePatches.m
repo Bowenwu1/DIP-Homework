@@ -34,8 +34,8 @@ for image_index = 1 : image_num
             % ########### CENTER AREA ##########
             lr_center_r = lr_r + lr_patch_size_half;
             lr_center_c = lr_c + lr_patch_size_half;
-            hr_center_r = (lr_center_r - 1) * scale_factor + 1;
-            hr_center_c = (lr_center_c - 1) * scale_factor + 1;
+            hr_center_r = (lr_center_r - 1 + 0.5) * scale_factor + 1 - 0.5;
+            hr_center_c = (lr_center_c - 1 + 0.5) * scale_factor + 1 - 0.5;
             hr_r = hr_center_r - hr_center_size_half;
             hr_c = hr_center_c - hr_center_size_half;
             hr_r1 = hr_center_r + hr_center_size_half;

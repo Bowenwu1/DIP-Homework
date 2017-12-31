@@ -22,7 +22,7 @@ large_patch_size = 21;
 large_patch_effective_size = 9;
 % ####################################
 
-sample_image = imread('/Users/wubowen/Documents/DIP-Homework/DIP-PROJECT/Set14/face.bmp');
+sample_image = imread('/Users/wubowen/Documents/DIP-Homework/DIP-PROJECT/Set14/comic.bmp');
 [origin_h, origin_w, chanel_num] = size(sample_image);
 lr_image = zeros(floor(origin_h / 3), floor(origin_w / 3), chanel_num);
 for i = 1 : chanel_num

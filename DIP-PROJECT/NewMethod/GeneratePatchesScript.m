@@ -43,7 +43,7 @@ for image_index = 1 : length(images)
     % Be careful about the type
     img = double(img);
     % Gaussian Conv
-    img = conv2(double(img), double(gaussian_kernel));
+    img_gaussian = conv2(double(img), double(gaussian_kernel));
     % Slicing
     [hr_w, hr_h] = size(img);
     patch_num_w = floor(hr_w / large_patch_size);
@@ -56,7 +56,8 @@ for image_index = 1 : length(images)
             c_max = c_min + large_patch_size - 1;
             % Down Sampling
             hr_patch = img(r_min:r_max, c_min:c_max);
-            lr_patch = bicubic(hr_patch, patch_size, patch_size);
+            hr_patch_gaussian = img_gaussian(r_min:r_max, c_min:c_max);
+            lr_patch = bicubic(hr_patch_gaussian, patch_size, patch_size);
             lr_patch = double(lr_patch);
             total_patches_num = total_patches_num + 1;
             % Substract mean

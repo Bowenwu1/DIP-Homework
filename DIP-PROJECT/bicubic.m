@@ -29,20 +29,25 @@ w_radio = origin_width / width;
 for m = 1 : height
     for n = 1 : width
         % zuo shang orientation
-        target_m = (m - 1) * h_radio + 1;
-        target_n = (n - 1) * w_radio + 1;
-        target_m_floor = floor(target_m);
-        target_n_floor = floor(target_n);
+        target_m = (m - 1 + 0.5) * h_radio + 1 - 0.5;
+        target_n = (n - 1 + 0.5) * w_radio + 1 - 0.5;
+        target_m_floor = round(target_m);
+        target_n_floor = round(target_n);
         % Directly copy the formula
+        wight = 1;
         for x = target_m_floor - 3 : target_m_floor + 3
             for y = target_n_floor - 3 : target_n_floor + 3
                 output_img(m, n) = output_img(m, n) + getPixel(x, y) * W(x - target_m) * W(y - target_n);
+                if (x < 1 || x > origin_height || y < 1 || y > origin_width)
+                    wight = wight -  W(x - target_m) * W(y - target_n);
+                end
             end
         end
+        output_img(m, n) = output_img(m, n) / wight;
     end
 end
 
-output_img = uint8(output_img);
+% output_img = uint8(output_img);
 
 end
 

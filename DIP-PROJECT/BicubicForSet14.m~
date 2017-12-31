@@ -20,10 +20,9 @@ for i = 1 : length(images)
     h = figure('Visible','off');
     subplot(1, 2, 1);
     imshow(origin_image);
-    title('origin');
     subplot(1, 2, 2);
     imshow(big_image);
-    title('Bicubic');
+    title
     saveas(h, filename);
     close(gcf)
 %     imshow(big_image);

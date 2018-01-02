@@ -3,7 +3,7 @@
 % output : an array contain the cluster num for each patches
 
 clear;
-clc;
+
 fprintf('INFO : start label all patches.\n');
 InitParameter
 load('LR_patch_set.mat');

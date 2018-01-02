@@ -11,9 +11,9 @@ input_img = double(input_img);
 
     function [output] = W(x)
         x = abs(x);
-        if (x >= 0 && x <= 1)
+        if (x >= 0 && x < 1)
             output = 1.5 * x^3 - 2.5 * x^2 + 1;
-        elseif (x > 1 && x <= 2)
+        elseif (x >= 1 && x < 2)
             output = -0.5 * x^3 + 2.5 * x^2 - 4 * x + 2;
         else
             output = 0;
@@ -29,10 +29,10 @@ w_radio = origin_width / width;
 for m = 1 : height
     for n = 1 : width
         % zuo shang orientation
-        target_m = (m - 1 + 0.5) * h_radio + 1 - 0.5;
-        target_n = (n - 1 + 0.5) * w_radio + 1 - 0.5;
-        target_m_floor = round(target_m);
-        target_n_floor = round(target_n);
+        target_m = (m - 1 + 0.5) * origin_height / height + 1 - 0.5;
+        target_n = (n - 1 + 0.5) * origin_width / width + 1 - 0.5;
+        target_m_floor = floor(target_m);
+        target_n_floor = floor(target_n);
         % Directly copy the formula
         wight = 1;
         for x = target_m_floor - 3 : target_m_floor + 3
@@ -43,7 +43,7 @@ for m = 1 : height
                 end
             end
         end
-        output_img(m, n) = output_img(m, n) / wight;
+%         output_img(m, n) = output_img(m, n) / wight;
     end
 end
 

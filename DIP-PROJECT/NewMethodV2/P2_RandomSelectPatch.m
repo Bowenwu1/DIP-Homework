@@ -3,7 +3,7 @@
 % Actually, doing this step is purely to save memory.
 % If I have 128GB RAM, I will not writting this script
 clear;
-clc;
+
 InitParameter
 fprintf('INFO : start randomly select patch for kmeans\n');
 load('total_patch_num.mat');

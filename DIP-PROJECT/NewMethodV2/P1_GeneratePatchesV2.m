@@ -1,7 +1,7 @@
 % Created by Bowen Wu in 20171229
 % This script is aim to generate all patches in train dir
 % This script run very slow
-clc;
+
 clear;
 InitParameter
 fprintf('INFO : start generate patches version 2.0 \n');

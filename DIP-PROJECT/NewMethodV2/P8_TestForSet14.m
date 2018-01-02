@@ -3,7 +3,7 @@
 % and calculate their PSNR, SSIM, Running Time
 
 clear;
-clc;
+
 InitParameter
 
 load('coef_matrix.mat');
@@ -17,19 +17,30 @@ all_time = zeros(length(all_images), 1);
 for all_images_index = 1 : length(all_images)
     sample_image = imread(all_images(all_images_index).name);
     [origin_h, origin_w, channel_num] = size(sample_image);
+    temp_image = zeros(origin_h - mod(origin_h, 3), origin_w - mod(origin_w, 3), channel_num);
+    for i = 1 : channel_num
+        temp_image(:, :, i) = sample_image(1:origin_h - mod(origin_h, 3), 1:origin_w - mod(origin_w, 3), i);
+    end
+    sample_image = uint8(temp_image);
+    [origin_h, origin_w, channel_num] = size(sample_image);
     lr_h = floor(origin_h / scale_factor);
     lr_w = floor(origin_w / scale_factor);
     lr_image = zeros(lr_h, lr_w, channel_num);
     hr_h = lr_h * scale_factor;
     hr_w = lr_w * scale_factor;
     % add gaussian to sample_image and downsampling
+%     sample_image = double(sample_image);
+    sample_image_temp = double(sample_image);
+%     sigma = 1.6;
+%     gaussian_kernel_size = ceil(sigma*3)*2+1;
     kernel = gaussianFilterGenerator(gaussian_kernel_size, sigma);
-    sample_image(:, :, 1) = conv2(double(sample_image(:, :, 1)), double(kernel), 'same');
+%     sample_image_temp(:, :, 1) = conv2(double(sample_image(:, :, 1)), double(kernel), 'same');
     for i = 1 : channel_num
-        lr_image(:, :, i) = bicubic(sample_image(:, :, i), lr_h, lr_w);
-    %       lr_image(:, :, i) = imresize(sample_image(:, :, i), [lr_h lr_w]);
+%         sample_image_temp(:, :, i) = conv2(double(sample_image(:, :, i)), double(kernel), 'same');
+        sample_image_temp(:, :, i) = filter2d(sample_image(:, :, i), kernel);
+        lr_image(:, :, i) = bicubic(sample_image_temp(:, :, i), lr_h, lr_w);
     end
-
+%     sample_image = uint8(sample_image);
     % My Algorithm start here
     tic
     hr_image = zeros(hr_h, hr_w, channel_num);
@@ -42,7 +53,6 @@ for all_images_index = 1 : length(all_images)
     % apply bicubic in U and V
     for i = 2 : channel_num
         hr_image(:, :, i) = bicubic(lr_image(:, :, i), hr_h, hr_w);
-    %       hr_image(:, :, i) = imresize(lr_image(:, :, i), [hr_h hr_w]);
     end
     lr_image = double(lr_image);
     hr_image = double(hr_image);
@@ -74,24 +84,25 @@ for all_images_index = 1 : length(all_images)
             l2normsquare = sum(diff .^ 2, 2);
             [~, clusterIndex] = min(l2normsquare);
             % Generate hr_feature from coef matrix
-            hr_feature = [lr_feature 1] * coef_matrix(:, :, clusterIndex);
-            hr_patch = reshape(hr_feature + lr_feature_mean, hr_center_size, hr_center_size) + lr_feature_mean;
+            hr_feature = [lr_feature] * coef_matrix(:, :, clusterIndex);
+            hr_patch = reshape(hr_feature + lr_feature_mean, hr_center_size, hr_center_size);
             % Add to HR image
             hr_image_ext(target_r:target_r1, target_c:target_c1, 1) = hr_image_ext(target_r:target_r1, target_c:target_c1, 1)...
-                                                                + hr_patch - lr_feature_mean;
+                                                                + hr_patch;
             hr_image_restore_count(target_r:target_r1, target_c:target_c1) = ...
                     hr_image_restore_count(target_r:target_r1, target_c:target_c1) + 1;
             
         end
     end
 
-    % Divide Count
+    % Divide Count 
     % hr_image(:, :, 1) = hr_image(:, :, 1) ./ hr_image_restore_count;
     % hr_image = ycbcr2rgb(uint8(hr_image));
     % imshow(uint8(hr_image));
 
     extend_boundary_hr = lr_patch_size_half * scale_factor;
     hr_image_ext = hr_image_ext ./ hr_image_restore_count;
+    hr_image_ext = uint8(hr_image_ext);
     hr_image(:, :, 1) = hr_image_ext(extend_boundary_hr+1:end - extend_boundary_hr, extend_boundary_hr + 1:end - extend_boundary_hr);
     if 3 == channel_num
         hr_image = ycbcr2rgb(uint8(hr_image));
@@ -124,6 +135,6 @@ for all_images_index = 1 : length(all_images)
     xlabel(label_text);
     saveas(h, filename);
     close(gcf)
-    fprintf('%s (PSNR, SSIM)=(%f, %f) Time=%f\n', all_images(all_images_index).name, all_psnr(all_images_index), all_ssim(all_images_index));
+    fprintf('%s (PSNR, SSIM)=(%f, %f) Time=%f \n', all_images(all_images_index).name, all_psnr(all_images_index), all_ssim(all_images_index), all_time(all_images_index));
 end
 fprintf('average (PSNR, SSIM)=(%f, %f) Time=%f\n', mean(all_psnr), mean(all_ssim), mean(all_time));

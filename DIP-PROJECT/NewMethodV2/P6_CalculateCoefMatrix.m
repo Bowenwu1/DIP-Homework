@@ -3,13 +3,13 @@
 % according to the label result from previous step
 
 clear;
-clc;
+
 InitParameter
 load('total_patch_num.mat');
 
 % coef_matrix = zeros(hr_center_size * hr_center_size, ...
 %                     lr_patch_size * lr_patch_size - 3, cluster_num);
-coef_matrix = zeros(lr_patch_size * lr_patch_size - 3, ...
+coef_matrix = zeros(lr_patch_size * lr_patch_size - 4, ...
                      hr_center_size * hr_center_size, cluster_num);
 whetherRankDeficiency = zeros(cluster_num, 1); % 1 for Deficiency, 0 otherwise
 
@@ -23,10 +23,16 @@ for cluster_index = 1 : cluster_num
     % calculate rank
     % special tech
     % l = length(LR_subset);
+    if isempty(LR_subset)
+        % for j = 1 : hr_center_size * hr_center_size
+        %     coef_matrix(:, j, cluster_index) = zeros(lr_patch_size * lr_patch_size - 3, 1);
+        % end
+        continue;
+    end
     [~, l] = size(LR_subset);
-    LR_subset = [LR_subset; ones(1, l)];
-     r = rank(LR_subset');
-     whetherRankDeficiency(cluster_index) = r;
+%     LR_subset = [LR_subset; ones(1, l)];
+    %  r = rank(LR_subset');
+    %  whetherRankDeficiency(cluster_index) = r;
 %     if r < lr_patch_size * lr_patch_size - 3
 %         fprintf('INFO : cluster No.%d have rank %d\n', cluster_index, r);
 %         whetherRankDeficiency(cluster_index) = 1;
@@ -38,4 +44,4 @@ for cluster_index = 1 : cluster_num
     end
 end
 
-save('coef_matrix.mat', 'coef_matrix');
+save('coef_matrix.mat', 'coef_matrix', '-v7.3');

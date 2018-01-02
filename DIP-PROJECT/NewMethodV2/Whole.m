@@ -4,4 +4,5 @@ P3_TrainClusterCenter
 P4_LabelAllPatchesV2
 P5_DividePatchesByClusterLabelV2
 P6_CalculateCoefMatrix
-P7_RebuildImage
+% P7_RebuildImage
+P8_TestForSet14

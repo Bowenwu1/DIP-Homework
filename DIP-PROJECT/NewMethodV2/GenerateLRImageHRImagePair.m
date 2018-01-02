@@ -16,7 +16,7 @@ HRImage = HRImage(1:hr_w - mod(hr_w, scaleFactor), 1:hr_h - mod(hr_h, scaleFacto
 kernel = gaussianFilterGenerator(gaussian_kernel_width, sigma);
 % Be careful about the type, I'm not sure for that
 % ##################
-HRImage_after_gaussian = conv2(double(HRImage), double(kernel), 'same');
+HRImage_after_gaussian = filter2d(double(HRImage), double(kernel));
 [hr_w, hr_h] = size(HRImage);
 LRImage = bicubic(uint8(HRImage_after_gaussian), hr_w / scaleFactor, hr_h / scaleFactor);
 

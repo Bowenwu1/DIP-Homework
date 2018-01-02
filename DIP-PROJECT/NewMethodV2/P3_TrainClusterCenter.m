@@ -4,7 +4,7 @@
 % by the previous step
 
 clear;
-clc;
+
 InitParameter
 load('random_LR_patch_set.mat');
 

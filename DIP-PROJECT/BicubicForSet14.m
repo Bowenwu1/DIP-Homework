@@ -16,16 +16,9 @@ for i = 1 : length(images)
     end
     small_image = uint8(small_image);
     big_image = uint8(big_image);
+    origin_image_temp = origin_image;
+    big_image_temp = big_image;
     filename = sprintf('/Users/wubowen/Documents/DIP-Homework/DIP-PROJECT/BicubicResult/BicubicResult%s.png', images(i).name);
-    h = figure('Visible','off');
-    subplot(1, 2, 1);
-    imshow(origin_image);
-    title('origin');
-    subplot(1, 2, 2);
-    imshow(big_image);
-    title('Bicubic');
-    saveas(h, filename);
-    close(gcf)
 %     imshow(big_image);
     if (3 == dimension)
         origin_image = rgb2ycbcr(origin_image);
@@ -35,4 +28,15 @@ for i = 1 : length(images)
     all_ssim(i) = SSIM(origin_image(:, :, 1), big_image(:, :, 1));
     fprintf(strcat(images(i).name, ' : (', num2str(all_psnr(i)), ', ', ...
                 num2str(all_ssim(i)), ')\n'));
+    h = figure('Visible','off');
+    subplot(1, 2, 1);
+    imshow(origin_image_temp);
+    title('origin');
+    subplot(1, 2, 2);
+    imshow(big_image_temp);
+    title('Bicubic');
+    l = sprintf('(PSNR, SSIM)=(%f, %f)', all_psnr(i), all_ssim(i));
+    xlabel(l);
+    saveas(h, filename);
+    close(gcf)
 end

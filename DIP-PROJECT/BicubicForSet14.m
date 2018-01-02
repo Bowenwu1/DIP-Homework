@@ -19,6 +19,7 @@ for i = 1 : length(images)
     origin_image_temp = origin_image;
     big_image_temp = big_image;
     filename = sprintf('/Users/wubowen/Documents/DIP-Homework/DIP-PROJECT/BicubicResult/BicubicResult%s.png', images(i).name);
+    filename_image = sprintf('/Users/wubowen/Documents/DIP-Homework/DIP-PROJECT/BicubicResult/Bicubic%s.png', images(i).name);
 %     imshow(big_image);
     if (3 == dimension)
         origin_image = rgb2ycbcr(origin_image);
@@ -39,4 +40,5 @@ for i = 1 : length(images)
     xlabel(l);
     saveas(h, filename);
     close(gcf)
+    imwrite(big_image_temp, filename_image);
 end

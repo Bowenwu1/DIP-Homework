@@ -111,6 +111,7 @@ for all_images_index = 1 : length(all_images)
     % My algorithm ends here
     all_time(all_images_index) = toc;
     filename = sprintf(sprintf('/Users/wubowen/Documents/DIP-Homework/DIP-PROJECT/NewMethodResult/NewMethodResult%s.png', all_images(all_images_index).name));
+    filename_image = sprintf(sprintf('/Users/wubowen/Documents/DIP-Homework/DIP-PROJECT/NewMethodResult/NewMethod%s.png', all_images(all_images_index).name));
     if 3 == channel_num
         hr_image_y = rgb2ycbcr(hr_image);
         sample_image_y = rgb2ycbcr(sample_image);
@@ -135,6 +136,7 @@ for all_images_index = 1 : length(all_images)
     xlabel(label_text);
     saveas(h, filename);
     close(gcf)
+    imwrite(hr_image, filename_image);
     fprintf('%s (PSNR, SSIM)=(%f, %f) Time=%f \n', all_images(all_images_index).name, all_psnr(all_images_index), all_ssim(all_images_index), all_time(all_images_index));
 end
 fprintf('average (PSNR, SSIM)=(%f, %f) Time=%f\n', mean(all_psnr), mean(all_ssim), mean(all_time));

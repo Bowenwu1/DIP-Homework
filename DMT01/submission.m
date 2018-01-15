@@ -33,55 +33,6 @@ end
 
 % imshow(edge_img);
 
-% Hough Transform
-% Line form : r = x * cos(theta) + y * sin(theta)
-% Theta : -pi - pi(not include)
-% r : sqrt(w^2 + h^2)
-% theta_start = -pi;
-% theta_level = 500;
-% theta_length = abs(theta_start) / theta_level;
-% hough_space = zeros(theta_level * 2, ceil(sqrt((w + 1)^2 + (h+1)^2)));
-% % Voting for Hough Space
-% for x = 1 : w
-%     for y = 1 : h
-%         if edge_img(x, y) == 255
-%             % find edge
-%             for i = 1 : theta_level * 2
-%                 degree = theta_start + (i - 1) * theta_length;
-%                 r = x * cos(degree) + y * sin(degree);
-%                 r = abs(r);
-%                 r = ceil(r);
-%                 hough_space(i, r) = hough_space(i, r) + 1;
-%             end
-%         end
-%     end
-% end
-% 
-% [hough_space_h, hough_space_w] = size(hough_space);
-% four_line = cell(4);
-% for m = 1 : 4
-%     [c, r] = find(hough_space == max(max(hough_space)));
-%     four_line{m} = [c, r];
-%     hough_space(c, r) = eps;
-% end
-% 
-% image_four_line = zeros(w, h);
-% % Draw four lines
-% for m = 1 : 4
-%     for x = 1 : w
-%         for y = 1 : h
-%             degree = theta_start + (four_line{m}(1) - 1) * theta_length;
-%             r = four_line{m}(2);
-%             r_temp = x * cos(degree) + y * sin(degree);
-%             if ceil(abs(r_temp)) == r
-%                 image_four_line(x, y) = 255;
-%             end
-%         end
-%     end
-% end
-% 
-% image_four_line = uint8(image_four_line);
-% imshow(image_four_line);
 
 [H,Theta,Rho] = hough(edge_img);
 % subplot(222), imshow(H,[],'XData',Theta,'YData',Rho,'InitialMagnification','fit'),...

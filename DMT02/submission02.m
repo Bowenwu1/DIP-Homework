@@ -1,1 +1,1 @@
-findContour('input.jpg', '/Users/bowenwu/Documents/MATLAB/DMT02/result/output-');
+findContour('output.jpg', '/Users/wubowen/Documents/DIP-Homework/DMT02/result/output-')

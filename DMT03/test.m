@@ -24,3 +24,6 @@ end
 rate = sum(result_array == test_labels);
 rate = rate / test_num;
 fprintf('Accuracy : %f. With Running Time : %f\n', rate, time);
+
+% Save the model
+save('/Users/wubowen/Documents/DIP-Homework/DMT03/digit_model.mat', 'model', '-v7.3');

@@ -3,7 +3,7 @@ function [ output, originOutput ] = preprocessForMnist( input )
 
 % first step : make it 2-value
 input = rgb2gray(input);
-input = min_median_max_filter2d(input, 5, 5, @min, 255);
+input = min_median_max_filter2d(input, 3, 3, @min, 255);
 input = im2bw(input, graythresh(input));
 input = ~input;
 % second step : rotate the 2-value image, make it stronger
